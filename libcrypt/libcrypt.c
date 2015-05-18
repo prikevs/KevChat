@@ -11,6 +11,8 @@ const char *crypt_error_to_string(int errno)
         case ERROR_YARROW: return "Error registering yarrow PRNG";
         case ERROR_READ_IV: return "Error reading PRNG for IV required";
         case ERROR_REG_AES: return "Error registering cipher.";
+        case ERROR_HASH_TOO_SHORT: return "Hash output array too short.";
+        case ERROR_REG_SHA1: return "Error registering SHA1";
         default: return error_to_string(errno);
     }    
     return "";
