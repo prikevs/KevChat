@@ -4,20 +4,24 @@
 #include "datauct.h"
 #include "skiplist.h"
 
-#define SESSIONLEN 16
 
 typedef struct _Session {
+//    pthread_mutex_t lock;
     unsigned char userid[USERLEN];
 }Session;
 
-typedef struct _Sessionlist {
-    Skiplist skiplist;    
-}Sessionlist;
+typedef struct _SessionList {
+    SkipList skiplist;    
+}SessionList;
 
-int sessionlist_init(Sessionlist *, unsigned char *);
-int sessionlist_insert(Sessionlist *, unsigned char *, Session *);
-Session *sessionlist_search(Sessionlist *, unsigned char *);
-int sessionlist_delete(Sessionlist *, unsigned char *);
-void sessionlist_dump(Sessionlist *);
+int sessionlist_init(SessionList *, unsigned char *);
+
+int sessionlist_insert(SessionList *, unsigned char *, Session *);
+
+Session *sessionlist_search(SessionList *, unsigned char *);
+
+int sessionlist_delete(SessionList *, unsigned char *);
+
+void sessionlist_dump(SessionList *);
 
 #endif

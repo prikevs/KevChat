@@ -14,26 +14,26 @@ typedef struct _Node {
     struct _Node **forward;
 }Node;
 
-typedef struct _Skiplist {
+typedef struct _SkipList {
     int level;
     int size;
     pthread_mutex_t lock;
     struct _Node *header;
-}Skiplist;
+}SkipList;
 
 
-int skiplist_init(Skiplist *, unsigned char *);
+int skiplist_init(SkipList *, unsigned char *);
 
-int skiplist_insert_raw(Skiplist *, unsigned char *, void *, int(* cmp)(unsigned char *, unsigned char *));
+int skiplist_insert_raw(SkipList *, unsigned char *, void *, int(* cmp)(unsigned char *, unsigned char *));
 
-void *skiplist_search_raw(Skiplist *, unsigned char *, int(* cmp)(unsigned char *, unsigned char *));
+void *skiplist_search_raw(SkipList *, unsigned char *, int(* cmp)(unsigned char *, unsigned char *));
 
-int skiplist_delete_raw(Skiplist *, unsigned char *, int(* cmp)(unsigned char *, unsigned char *),void(* del)(void *));
+int skiplist_delete_raw(SkipList *, unsigned char *, int(* cmp)(unsigned char *, unsigned char *),void(* del)(void *));
 
-void skiplist_dump(Skiplist *);
+void skiplist_dump(SkipList *);
 
-void skiplist_lock(Skiplist *);
-void skiplist_unlock(Skiplist *);
+void skiplist_lock(SkipList *);
+void skiplist_unlock(SkipList *);
 
 
 #endif

@@ -6,7 +6,7 @@
 int main()
 {
     unsigned char arr[][16] = {"3", "6", "8", "2", "5"};
-    Sessionlist list;
+    SessionList list;
     Session *newclient = NULL;
     sessionlist_init(&list, "fffffff");
     int i;

@@ -6,9 +6,10 @@
 
 #include "skiplist.h"
 
+//#define DEMO
 #define SKIPLIST_MAX_LEVEL 6
 
-int skiplist_init(Skiplist *list, unsigned char *keymax)
+int skiplist_init(SkipList *list, unsigned char *keymax)
 {
     int i;
 
@@ -43,13 +44,13 @@ int skiplist_init(Skiplist *list, unsigned char *keymax)
 }
 
 /* lock the skiplist */
-void skiplist_lock(Skiplist *list)
+void skiplist_lock(SkipList *list)
 {
     pthread_mutex_lock(&list->lock);
 }
 
 /* unlock the skiplist */
-void skiplist_unlock(Skiplist *list)
+void skiplist_unlock(SkipList *list)
 {
     pthread_mutex_unlock(&list->lock);
 }
@@ -63,7 +64,7 @@ static int rand_level()
     return level;
 }
 
-int skiplist_insert_raw(Skiplist *list, unsigned char *key, void *value, int(* cmp)(unsigned char *, unsigned char *))
+int skiplist_insert_raw(SkipList *list, unsigned char *key, void *value, int(* cmp)(unsigned char *, unsigned char *))
 {
     Node *update[SKIPLIST_MAX_LEVEL + 1];
     Node *x = list->header;
@@ -112,7 +113,7 @@ int skiplist_insert_raw(Skiplist *list, unsigned char *key, void *value, int(* c
 }
 
 
-void *skiplist_search_raw(Skiplist *list, unsigned char *key, int(* cmp)(unsigned char *, unsigned char *))
+void *skiplist_search_raw(SkipList *list, unsigned char *key, int(* cmp)(unsigned char *, unsigned char *))
 {
     Node *x = list->header;
     int i;
@@ -142,7 +143,7 @@ static void skiplist_node_free(Node *x, void(* del)(void *))
     }
 }
 
-int skiplist_delete_raw(Skiplist *list, unsigned char *key, int(* cmp)(unsigned char *, unsigned char *), void(* del)(void *))
+int skiplist_delete_raw(SkipList *list, unsigned char *key, int(* cmp)(unsigned char *, unsigned char *), void(* del)(void *))
 {
     int i;
     Node *update[SKIPLIST_MAX_LEVEL + 1];
@@ -172,7 +173,7 @@ int skiplist_delete_raw(Skiplist *list, unsigned char *key, int(* cmp)(unsigned 
 }
 
 
-void skiplist_dump(Skiplist *list)
+void skiplist_dump(SkipList *list)
 {
     int i;
     Node *x;
