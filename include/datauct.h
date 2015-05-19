@@ -1,7 +1,7 @@
 #ifndef DATAUCT_H
 #define DATAUCT_H
 
-#define USERLEN 20
+#define USERLEN 16
 
 #define MSGALLLEN 100
 #define SESSIONLEN 16
@@ -10,6 +10,8 @@
 #define CRYPTLEN (MSGALLLEN - SESSIONLEN - IVLEN)
 #define TOCRYPTLEN (CRYPTLEN - HMACLEN)
 #define TIMELEN 8
+
+#define AESKEYLEN 16
 
 typedef struct _DataFromClient {
     unsigned char session[SESSIONLEN];

@@ -8,6 +8,7 @@
 /* nodes for storing one's friends */
 typedef struct _Friend {
     unsigned char friendid[USERLEN];
+    int status;
     struct _Friend *next; 
 }Friend;
 
@@ -34,11 +35,13 @@ typedef struct _ClientList {
 
 int clientlist_init(ClientList *);
 
-int clientlist_insert(ClientList *, unsigned char *, Client *);
+int clientlist_insert_client(ClientList *, unsigned char *, Client *);
 
-Client *clientlist_search(ClienList *, unsigned char *);
+//Client *clientlist_search(ClienList *, unsigned char *);
 
 int clientlist_isfriend(ClientList *, unsigned char *, unsigned char *);
+
+int clientlist_friend_op(ClientList *, unsigned char *key, unsigned char *, int);
 
 void clientlist_dump(ClientList *);
 
