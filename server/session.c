@@ -13,8 +13,14 @@ void del(void *value)
     free(value);
 }
 
-int sessionlist_init(SessionList *list, unsigned char *keymax)
+int sessionlist_init(SessionList *list)
 {
+    unsigned char *keymax = NULL;
+    int i;
+    keymax = (unsigned char *)malloc(sizeof(unsigned char) * SESSIONLEN);
+    for(i = 0; i < SESSIONLEN; i++) {
+        keymax = 0xff;     
+    }
     if (skiplist_init(&list->skiplist, keymax) < 0)
         return -1;
     return 0;

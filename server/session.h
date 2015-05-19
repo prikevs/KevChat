@@ -14,7 +14,7 @@ typedef struct _SessionList {
     SkipList skiplist;    
 }SessionList;
 
-int sessionlist_init(SessionList *, unsigned char *);
+int sessionlist_init(SessionList *);
 
 int sessionlist_insert(SessionList *, unsigned char *, Session *);
 
