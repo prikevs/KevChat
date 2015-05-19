@@ -1,4 +1,4 @@
-#include "../libcrypt/libcrypt.h"
+#include "libcrypt.h"
 
 int main()
 {

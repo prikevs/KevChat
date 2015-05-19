@@ -2,20 +2,14 @@
 /* to be done: mutex for value */
 
 #ifndef SKIPLIST_H
-#define SKIPLIST
+#define SKIPLIST_H
 
-#define DEMO
 
 #include <pthread.h>
 //#include "clientinfo.h"
-#ifdef DEMO
-typedef struct _Client {
-    int value;    
-}Client;
-#endif
 
 typedef struct _Node {
-    int key;
+    unsigned char *key;
     void *value;      /* Online Client info */
     struct _Node **forward;
 }Node;
@@ -28,15 +22,18 @@ typedef struct _Skiplist {
 }Skiplist;
 
 
-int skiplist_init(Skiplist *);
+int skiplist_init(Skiplist *, unsigned char *);
 
-int skiplist_insert(Skiplist *, int, void *);
+int skiplist_insert_raw(Skiplist *, unsigned char *, void *, int(* cmp)(unsigned char *, unsigned char *));
 
-void *skiplist_search(Skiplist *, int);
+void *skiplist_search_raw(Skiplist *, unsigned char *, int(* cmp)(unsigned char *, unsigned char *));
 
-int skiplist_delete(Skiplist *, int);
+int skiplist_delete_raw(Skiplist *, unsigned char *, int(* cmp)(unsigned char *, unsigned char *),void(* del)(void *));
 
 void skiplist_dump(Skiplist *);
+
+void skiplist_lock(Skiplist *);
+void skiplist_unlock(Skiplist *);
 
 
 #endif
