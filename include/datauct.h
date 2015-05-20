@@ -1,10 +1,11 @@
 #ifndef DATAUCT_H
 #define DATAUCT_H
 
-#define USERLEN 16
+#define USERLEN 20
+#define HASHLEN 20
 #define IDLEN 4
 
-#define MSGALLLEN 100
+#define MSGALLLEN 1068
 #define SESSIONLEN 16
 #define IVLEN 16
 #define HMACLEN 20
@@ -26,8 +27,9 @@ typedef struct _MsgFromClient {
 }MsgFromClient;
 
 typedef struct _RealMsgFromClient {
-    unsigned char userid[USERLEN];
+    unsigned char userid[IDLEN];
     unsigned char time[TIMELEN];
+    unsigned char message[10];
 }RealMsgFromClient;
 
 #endif

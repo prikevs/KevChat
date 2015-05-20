@@ -17,22 +17,26 @@ int generateRandom(unsigned char *array, int len)
     if (x != len) {
         return ERROR_READ_IV;
     }
+    sprng_done(&prng);
     return CRYPT_OK;
 }
 
-int symmetricEncrypt(unsigned char *key, int keylen, unsigned char *buffer, unsigned long len, unsigned char *IV, int ivlen)
+int symmetricEncrypt(unsigned char *key, int keylen, unsigned char *in, unsigned long len, unsigned char *IV, int ivlen)
 {
     symmetric_CTR ctr;
-    int err;
+    int err, idx;
 
     /* register aes first */
-    if (register_cipher(&aes_desc) == -1) {
+    
+    if ((err = register_cipher(&rijndael_desc)) == -1) {
         return ERROR_REG_AES;
     }
     
+    idx = find_cipher("rijndael"); 
+    
     /* start up CTR mode */
     if ((err = ctr_start(
-             find_cipher("aes"),    /* index of desired cipher */
+        find_cipher("rijndael"),    /* index of desired cipher */
                              IV,    /* the initial vecoter */ 
                             key,    /* the secret key */
                          keylen,    /* length of secret key */
@@ -40,11 +44,18 @@ int symmetricEncrypt(unsigned char *key, int keylen, unsigned char *buffer, unsi
       CTR_COUNTER_LITTLE_ENDIAN,
                            &ctr)
         ) != CRYPT_OK) {
+        //printf("%s\n", error_to_string(err));
         return err;
     }
-
-    if ((err = ctr_encrypt(     buffer, /* plaintext */
-                                buffer, /* ciphertext */
+    /*
+    printf("from libcrypt: \n");
+    for(i = 0; i < 30; i++)
+        printf("%02x ", in[i]);
+    printf("\n");
+    fflush(stdout);
+    */
+    if ((err = ctr_encrypt(     in, /* plaintext */
+                                in, /* ciphertext */
                                    len, /* length of plaintext */
                                   &ctr) /* CTR state */
         ) != CRYPT_OK) {
@@ -58,19 +69,19 @@ int symmetricEncrypt(unsigned char *key, int keylen, unsigned char *buffer, unsi
     return CRYPT_OK;
 }
 
-int symmetricDecrypt(unsigned char *key, int keylen, unsigned char *buffer, unsigned long len, unsigned char *IV, int ivlen)
+int symmetricDecrypt(unsigned char *key, int keylen, unsigned char *in, unsigned long len, unsigned char *IV, int ivlen)
 {
     symmetric_CTR ctr;
     int err;
 
     /* register aes first */
-    if (register_cipher(&aes_desc) == -1) {
+    if (register_cipher(&rijndael_desc) == -1) {
         return ERROR_REG_AES;
     }
     
     /* start up CTR mode */
     if ((err = ctr_start(
-             find_cipher("aes"),    /* index of desired cipher */
+        find_cipher("rijndael"),    /* index of desired cipher */
                              IV,    /* the initial vecoter */ 
                             key,    /* the secret key */
                          keylen,    /* length of secret key */
@@ -89,10 +100,10 @@ int symmetricDecrypt(unsigned char *key, int keylen, unsigned char *buffer, unsi
 //        return -1;
 //    }
 
-    if ((err = ctr_decrypt(     buffer, /* plaintext */
-                                buffer, /* ciphertext */
-                                   len, /* length of plaintext */
-                                  &ctr) /* CTR state */
+    if ((err = ctr_decrypt(     in, /* plaintext */
+                                in, /* ciphertext */
+                               len, /* length of plaintext */
+                              &ctr) /* CTR state */
         ) != CRYPT_OK) {
         return err;
     }
