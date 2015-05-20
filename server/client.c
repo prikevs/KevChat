@@ -3,10 +3,30 @@
 #include "logger.h"
 #include <string.h>
 #include <stdlib.h>
+#include <arpa/inet.h>
+
+void keytoid(unsigned int *id, unsigned char *key)
+{
+    *id = *((unsigned int *)key);
+    *id = ntohl(*id);
+}
+
+void idtokey(unsigned int id, unsigned char *key)
+{
+    id = htonl(id);
+    *((int *)key) = id;
+}
 
 int cmp(unsigned char *a, unsigned char *b)
 {
-    return memcmp(a, b, USERLEN);
+    unsigned int na, nb;
+    keytoid(&na, a);
+    keytoid(&nb, b);
+    return na-nb;
+    /*
+    printf("na-nb=%d\n", na-nb);
+    printf("na=%d, nb=%d\n", na, nb);
+    */
 }
 
 void del(void *value)
@@ -16,8 +36,9 @@ int clientlist_init(ClientList *list)
 {
     unsigned char *keymax = NULL;
     int i;
-    keymax = (unsigned char *)malloc(sizeof(unsigned char) * USERLEN);    
-    for(i = 0; i < USERLEN; i++) {
+    keymax = (unsigned char *)malloc(sizeof(unsigned char) * IDLEN);    
+    keymax[0] = 0x7f;
+    for(i = 1; i < IDLEN; i++) {
         keymax[i] = 0xff; 
     }
     if (skiplist_init(&list->skiplist, keymax) < 0)
@@ -25,16 +46,19 @@ int clientlist_init(ClientList *list)
     return 0;
 }
 
-int clientlist_insert_client(ClientList *list, unsigned char *key, Client *value)
+int clientlist_insert_client(ClientList *list, unsigned int userid, Client *value)
 {
     int res, i;
     /*  */
     Friend *head = NULL;
+    unsigned char *key = (unsigned char *)malloc(IDLEN * sizeof(unsigned char));
+    idtokey(userid, key);
+
     pthread_mutex_init(&value->friends.lock, NULL);
     head = (Friend *)malloc(sizeof(Friend));
     head->next = NULL;
-    for(i = 0; i < USERLEN; i++) {
-        head->friendid[i] = 0xff; 
+    for(i = 0; i < IDLEN; i++) {
+        head->userid[i] = 0xff; 
     }
     value->friends.head = head;
     skiplist_lock(&list->skiplist);
@@ -54,11 +78,15 @@ static Client *clientlist_search(ClientList *list, unsigned char *key)
     return (Client *)res;
 }
 
-int clientlist_isfriend(ClientList *list, unsigned char *key1, unsigned char *key2)
+int clientlist_isfriend(ClientList *list, unsigned int id1, unsigned int id2)
 {
     Client *client = NULL;
     Friend *fri = NULL;
     int res = 1;
+    unsigned char key1[IDLEN];
+    unsigned char key2[IDLEN];
+    idtokey(id1, key1);
+    idtokey(id2, key2);
 
     skiplist_lock(&list->skiplist);
     client = clientlist_search(list, key1);
@@ -70,7 +98,7 @@ int clientlist_isfriend(ClientList *list, unsigned char *key1, unsigned char *ke
     skiplist_unlock(&list->skiplist);
 
     fri = client->friends.head->next;
-    while(fri != NULL && cmp(key2, fri->friendid) != 0) {
+    while(fri != NULL && cmp(key2, fri->userid) != 0) {
         fri = fri->next; 
     }
     if (fri == NULL)
@@ -85,12 +113,12 @@ int clientlist_addfriend(Friend *head, unsigned char *friendid)
 {
     Friend *fri = head; 
     Friend *newfri;
-    while(fri->next != NULL && cmp(friendid, fri->friendid) != 0) {
+    while(fri->next != NULL && cmp(friendid, fri->userid) != 0) {
         fri = fri->next;
     }
-    if (fri->next == NULL && cmp(friendid, fri->friendid) != 0) {
+    if (fri->next == NULL && cmp(friendid, fri->userid) != 0) {
         newfri = (Friend *)malloc(sizeof(Friend));
-        memcpy(newfri->friendid, friendid, USERLEN);
+        memcpy(newfri->userid, friendid, IDLEN);
         newfri->next = NULL;
         fri->next = newfri;
     }
@@ -109,11 +137,11 @@ int clientlist_delfriend(Friend *head, unsigned char *friendid)
 {
     Friend *fri = head->next; 
     Friend *before = head;
-    while(fri != NULL && cmp(friendid, fri->friendid) != 0) {
+    while(fri != NULL && cmp(friendid, fri->userid) != 0) {
         before = fri;
         fri = fri->next;
     }
-    if (fri != NULL && cmp(friendid, fri->friendid) == 0) {
+    if (fri != NULL && cmp(friendid, fri->userid) == 0) {
         before->next = fri->next;
         free(fri); 
         return 0;
@@ -121,10 +149,15 @@ int clientlist_delfriend(Friend *head, unsigned char *friendid)
     return 1;
 }
 
-int clientlist_friend_op(ClientList *list, unsigned char *key, unsigned char *friendid, int op)
+int clientlist_friend_op(ClientList *list, unsigned int id1, unsigned int id2, int op)
 {
     Client *client = NULL;
     int res = 1;
+    unsigned char key[IDLEN];
+    unsigned char friendid[IDLEN];
+    idtokey(id1, key);
+    idtokey(id2, friendid);
+    
     skiplist_lock(&list->skiplist);
     client = clientlist_search(list, key);
     if (client == NULL) {
@@ -154,10 +187,10 @@ void clientlist_dump(ClientList *list)
     skiplist_dump(&list->skiplist);
     x = (&(list->skiplist))->header;
     while(x && x->forward[1] != (&(list->skiplist))->header) {
-        printf("%s:", x->forward[1]->key);
+        printf("%d:", ntohl(*((int *)(x->forward[1]->key))));
         y = ((Client *)(x->forward[1]->value))->friends.head->next;
         while(y) {
-            printf("%s->", y->friendid);
+            printf("%d->", ntohl(*((int *)(y->userid))));
             y = y->next;
         }
         x = x->forward[1];

@@ -19,21 +19,37 @@ int main()
     printf("Insert:----------------\n");  
     for(i = 0; i < 5; i++) {
         newclient = (Client *)malloc(sizeof(Client));
-        memcpy(newclient->userid, arr[i], USERLEN);
-        clientlist_insert_client(&list, arr[i], newclient); 
+        memcpy(newclient->userid, arr[i], IDLEN);
+//        printf(",,\n");
+//        fflush(stdout);
+        clientlist_insert_client(&list, i+1, newclient); 
         newclient = NULL;
     }
     clientlist_dump(&list);
 
-    res = clientlist_friend_op(&list, arr[0], arr[1], 1);
+    
+    res = clientlist_friend_op(&list, 1, 2, 1);
     clientlist_dump(&list);
-
-    if (clientlist_isfriend(&list, arr[0], arr[1])) {
-        printf("%s, %s is friend\n", arr[0], arr[1]);    
+    if (clientlist_isfriend(&list, 1, 2)) {
+        printf("%d, %d is friend\n", 1, 2);    
     }
     else {
-        printf("%s, %s is not friend\n", arr[0], arr[1]);    
+        printf("%d, %d is not friend\n", 1, 2);    
     }
+
+    res = clientlist_friend_op(&list, 1, 2, 0);
+    res = clientlist_friend_op(&list, 1, 3, 1);
+    res = clientlist_friend_op(&list, 1, 4, 1);
+    res = clientlist_friend_op(&list, 1, 3, 1);
+    res = clientlist_friend_op(&list, 1, 2, 1);
+    clientlist_dump(&list);
+    if (clientlist_isfriend(&list, 1, 2)) {
+        printf("%d, %d is friend\n", 1, 2);    
+    }
+    else {
+        printf("%d, %d is not friend\n", 1, 2);    
+    }
+    /*
 
     if (clientlist_isfriend(&list, arr[0], arr[2])) {
         printf("%s, %s is friend\n", arr[0], arr[2]);    
@@ -44,6 +60,8 @@ int main()
     res = clientlist_friend_op(&list, arr[0], arr[1], 0);
     printf("res=%d\n", res);
     clientlist_dump(&list);
+    */
+   
     /*
     printf("Search:------------------\n");
     unsigned char keys[][16] = {"3", "2", "5", "9", "8"};

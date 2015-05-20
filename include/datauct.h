@@ -2,6 +2,7 @@
 #define DATAUCT_H
 
 #define USERLEN 16
+#define IDLEN 4
 
 #define MSGALLLEN 100
 #define SESSIONLEN 16
