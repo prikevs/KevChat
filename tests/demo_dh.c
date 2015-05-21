@@ -1,3 +1,5 @@
+//gcc -o demo_dh demo_dh.c ../libcrypt/libcrypt.c ../libcrypt/dh.c ../libcrypt/symmetric.c -I../include -ltomcrypt -lgmp -Wall
+
 #include "libcrypt.h"
 #include <stdio.h>
 #include <string.h>
