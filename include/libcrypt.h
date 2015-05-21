@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      libcrypt.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * Package APIs for libtomcrypt
+***************************************************/
+
 #ifndef KEVCRYPT_H
 #define KEVCRYPT_H
 #include "rsa.h"

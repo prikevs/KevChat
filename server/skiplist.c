@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      skiplist.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * skiplist, a data structure 
+***************************************************/
+
 /* Attention value free ! */
 #include <unistd.h>
 #include <stdio.h>

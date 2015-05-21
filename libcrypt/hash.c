@@ -1,6 +1,16 @@
+/************************************************** 
+    >FileName:      hash.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * Package APIs for hash functions
+***************************************************/
+
 #include "libcrypt.h"
 #include <tomcrypt.h>
 
+/* sha1 hash function */
 int hashSHA1(unsigned char *in, int inlen, unsigned char *out, int *outlen)
 {
     hash_state md;
@@ -15,6 +25,7 @@ int hashSHA1(unsigned char *in, int inlen, unsigned char *out, int *outlen)
     return CRYPT_OK;
 }
 
+/* hmac hash function */
 int hashHMAC(unsigned char *key, int keylen, unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
 {
     int idx, err;

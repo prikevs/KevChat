@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      rsa.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * Package APIs for RSA functions
+***************************************************/
+
 #ifndef RSA_H
 #define RSA_H
 #include <tomcrypt.h>

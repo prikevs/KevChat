@@ -1,3 +1,11 @@
+/************************************************** 
+    >FileName:      hash.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * Package APIs for hash functions
+***************************************************/
 #ifndef HASH_H
 #define HASH_H
 int hashSHA1(unsigned char *in, int inlen, unsigned char *out, int *outlen);

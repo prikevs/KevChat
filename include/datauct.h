@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      datauct.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * UCT structure for messages
+***************************************************/
+
 #ifndef DATAUCT_H
 #define DATAUCT_H
 

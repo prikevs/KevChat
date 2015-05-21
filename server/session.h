@@ -1,3 +1,13 @@
+/************************************************** 
+    >FileName:      session.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * save session infomation
+      * use skiplist as data structure 
+***************************************************/
+
 #ifndef SESSION_H
 #define SESSION_H
 

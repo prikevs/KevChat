@@ -1,8 +1,18 @@
+/************************************************** 
+    >FileName:      rsa.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * Package APIs for RSA functions
+***************************************************/
+
+
 #define LTM_DESC
 #include <tomcrypt.h>
 #include "libcrypt.h"
 
-
+/* make RSA key */
 int makeRSAKey(rsa_key *key, int bits, int padding)
 {
     int hash_idx;
@@ -35,6 +45,7 @@ int makeRSAKey(rsa_key *key, int bits, int padding)
     return CRYPT_OK;
 }
 
+/* import RSA key from unsigned char buffer */
 int importRSAKey(rsa_key *key, unsigned char *in, unsigned long len)
 {
     int err;
@@ -44,6 +55,7 @@ int importRSAKey(rsa_key *key, unsigned char *in, unsigned long len)
     return CRYPT_OK;
 }
 
+/* export RSA key to unsigned char buffer */
 int exportRSAKey(rsa_key *key, unsigned char *out, unsigned long  *len, int ispublic)
 {
     int err;
@@ -60,6 +72,7 @@ int exportRSAKey(rsa_key *key, unsigned char *out, unsigned long  *len, int ispu
     return CRYPT_OK;
 }
 
+/* RSA encrypt function, input len needs to be at least 11 bytes shorter than RSA key */
 int RSAEncryptKey(rsa_key *key, unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen, char *lparam)
 {
     int err;
@@ -92,6 +105,7 @@ int RSAEncryptKey(rsa_key *key, unsigned char *in, unsigned long inlen, unsigned
     return CRYPT_OK;
 }
 
+/* RSA decrypt function */
 int RSADecryptKey(rsa_key *key, unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen, char *lparam)
 {
     int err, res;

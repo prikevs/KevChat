@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      libcrypt.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * Package APIs for libtomcrypt
+***************************************************/
+
 #include "libcrypt.h"
 #include <tomcrypt.h>
 

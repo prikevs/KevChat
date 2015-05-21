@@ -1,3 +1,13 @@
+/************************************************** 
+    >FileName:      client.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * save clients' online status and friendlist
+      * use skiplist as base data structure 
+***************************************************/
+
 #include "client.h"
 #include "skiplist.h"
 #include "logger.h"
@@ -5,18 +15,21 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
+/* convert char* to int */
 void keytoid(unsigned int *id, unsigned char *key)
 {
     *id = *((unsigned int *)key);
     *id = ntohl(*id);
 }
 
+/* convert int to char* */
 void idtokey(unsigned int id, unsigned char *key)
 {
     id = htonl(id);
     *((int *)key) = id;
 }
 
+/* callback function, used to compare key */
 int cmp(unsigned char *a, unsigned char *b)
 {
     unsigned int na, nb;
@@ -37,6 +50,7 @@ int clientlist_init(ClientList *list)
     unsigned char *keymax = NULL;
     int i;
     keymax = (unsigned char *)malloc(sizeof(unsigned char) * IDLEN);    
+    /* set the max of the key */
     keymax[0] = 0x7f;
     for(i = 1; i < IDLEN; i++) {
         keymax[i] = 0xff; 
@@ -67,6 +81,7 @@ int clientlist_insert_client(ClientList *list, unsigned int userid, Client *valu
     return res;
 }
 
+/* search for the value with the key */
 static Client *clientlist_search(ClientList *list, unsigned char *key)
 {
     void *res = NULL;
@@ -78,6 +93,7 @@ static Client *clientlist_search(ClientList *list, unsigned char *key)
     return (Client *)res;
 }
 
+/* judge if id2 in id1's friend list */
 int clientlist_isfriend(ClientList *list, unsigned int id1, unsigned int id2)
 {
     Client *client = NULL;
@@ -109,7 +125,8 @@ int clientlist_isfriend(ClientList *list, unsigned int id1, unsigned int id2)
     return res;
 }
 
-int clientlist_addfriend(Friend *head, unsigned char *friendid)
+/* add friendid in one's friend list */
+static int clientlist_addfriend(Friend *head, unsigned char *friendid)
 {
     Friend *fri = head; 
     Friend *newfri;
@@ -122,18 +139,14 @@ int clientlist_addfriend(Friend *head, unsigned char *friendid)
         newfri->next = NULL;
         fri->next = newfri;
     }
-    /*
-    printf("   ");
-    while(head != NULL) {
-        printf("%s->", head->friendid);    
-        head = head->next;
-    }
-    printf("NNN\n");
-    */
     return 0;
 }
 
-int clientlist_delfriend(Friend *head, unsigned char *friendid)
+/* delete friendid in one's friend list
+   success return 0
+   failed  return 1
+*/
+static int clientlist_delfriend(Friend *head, unsigned char *friendid)
 {
     Friend *fri = head->next; 
     Friend *before = head;
@@ -149,6 +162,12 @@ int clientlist_delfriend(Friend *head, unsigned char *friendid)
     return 1;
 }
 
+/* operation of friendlist 
+   id1 is the target list
+   id2 is the friendid to be added or deleted
+   op: 1 add friend
+       2 del friend
+*/
 int clientlist_friend_op(ClientList *list, unsigned int id1, unsigned int id2, int op)
 {
     Client *client = NULL;
@@ -179,6 +198,7 @@ int clientlist_friend_op(ClientList *list, unsigned int id1, unsigned int id2, i
 }
 
 
+/* output the friendlist */
 void clientlist_dump(ClientList *list)
 {
     Node *x;

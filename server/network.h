@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      network.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+        * functions attached to socket
+***************************************************/
+
 #ifndef NETWORK_H
 #define NETWORK
 

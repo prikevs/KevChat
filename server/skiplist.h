@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      skiplist.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * skiplist, a data structure 
+***************************************************/
+
 /* use skip list to maintain the list of online clients */
 /* to be done: mutex for value */
 

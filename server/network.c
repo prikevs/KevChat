@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      network.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * functions attached to socket
+***************************************************/
+
 #include "network.h"
 #include "database.h"
 #include "client.h"

@@ -1,3 +1,13 @@
+/************************************************** 
+    >FileName:      session.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * save session infomation
+      * use skiplist as data structure 
+***************************************************/
+
 #include "session.h"
 #include "skiplist.h"
 #include "logger.h"

@@ -1,3 +1,12 @@
+/************************************************** 
+    >FileName:      symmetric.c
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+      * Package APIs for symmetric functions(AES)
+***************************************************/
+
 #include <tomcrypt.h>
 #include "libcrypt.h"
 

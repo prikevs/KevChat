@@ -1,3 +1,13 @@
+/************************************************** 
+    >FileName:      client.h
+    >Author:        Kevince
+    >Email:         prikevs@gmail.com          
+    >CreateTime:    
+    >Description:
+        save clients' online status and friendlist
+        use skiplist as base data structure 
+***************************************************/
+
 #ifndef CLIENT_H
 #define CLIENT_H
 #include "datauct.h"
