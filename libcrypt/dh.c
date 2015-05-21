@@ -1,10 +1,10 @@
 /************************************************** 
-    >FileName:      libcrypt.h
+    >FileName:      dh.c
     >Author:        Kevince
     >Email:         prikevs@gmail.com          
     >CreateTime:    2015-5-21 Thu
     >Description:
-      * implementation of DH with GNUMP
+      * implementation of diffie-hellman with GNUMP
 ***************************************************/
 
 #include <gmp.h>
