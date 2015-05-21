@@ -12,6 +12,7 @@
 #include "rsa.h"
 #include "symmetric.h"
 #include "hash.h"
+#include "dh.h"
 
 enum {
     ERROR_DECRYPT = -1,

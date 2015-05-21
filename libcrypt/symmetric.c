@@ -33,15 +33,13 @@ int generateRandom(unsigned char *array, int len)
 int symmetricEncrypt(unsigned char *key, int keylen, unsigned char *in, unsigned long len, unsigned char *IV, int ivlen)
 {
     symmetric_CTR ctr;
-    int err, idx;
+    int err;
 
     /* register aes first */
     
     if ((err = register_cipher(&rijndael_desc)) == -1) {
         return ERROR_REG_AES;
     }
-    
-    idx = find_cipher("rijndael"); 
     
     /* start up CTR mode */
     if ((err = ctr_start(
