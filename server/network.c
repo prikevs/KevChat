@@ -44,6 +44,7 @@ void *DisposeNewClient(void *ptr)
     ClientList *clientlist = NULL;
 
     unsigned long len = sizeof(buf);
+    unsigned long keylen = sizeof(key);
     ssize_t res = 0;
     int client_fd = 0;
 
@@ -72,7 +73,7 @@ void *DisposeNewClient(void *ptr)
         threaddata = NULL; 
         pthread_exit(NULL);
     }
-    Auth_ParseDHMsg(buf, res, pri, 16, key, 16);
+    Auth_ParseDHMsg(buf, res, pri, 16, key, &keylen);
     //dump(key, 16);
 
     close(threaddata->client_fd);

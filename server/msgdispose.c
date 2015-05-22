@@ -14,13 +14,13 @@
 #include "datauct.h"
 #include "libcrypt.h"
 
-void Auth_MakeDHMsg(unsigned char *msg, int *msglen, unsigned char *private, int prilen)
+void Auth_MakeDHMsg(unsigned char *msg, unsigned long *msglen, unsigned char *private, unsigned long prilen)
 {
     generateRandom(private, prilen);
     getPublic(msg, msglen, private, prilen);
 }
 
-void Auth_ParseDHMsg(unsigned char *msg, int msglen, unsigned char *private, int prilen, unsigned char *key, int keylen)
+void Auth_ParseDHMsg(unsigned char *msg, unsigned long msglen, unsigned char *private, unsigned long prilen, unsigned char *key, unsigned long *keylen)
 {
     getKey(key, &keylen, msg, msglen, private, prilen);
 }
