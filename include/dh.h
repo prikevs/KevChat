@@ -10,7 +10,7 @@
 #ifndef DH_H
 #define DH_H
 
-void getPublic(unsigned char *, int *, const unsigned char *, int);
-void getKey(unsigned char *, int *, const unsigned char *, int, const unsigned char *, int);
+void getPublic(unsigned char *, unsigned long *, const unsigned char *, unsigned long);
+void getKey(unsigned char *, unsigned long *, const unsigned char *, unsigned long, const unsigned char *, unsigned long);
 
 #endif

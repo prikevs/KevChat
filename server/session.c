@@ -29,7 +29,7 @@ int sessionlist_init(SessionList *list)
     int i;
     keymax = (unsigned char *)malloc(sizeof(unsigned char) * SESSIONLEN);
     for(i = 0; i < SESSIONLEN; i++) {
-        keymax = 0xff;     
+        keymax[i] = 0xff;     
     }
     if (skiplist_init(&list->skiplist, keymax) < 0)
         return -1;

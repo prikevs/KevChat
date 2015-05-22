@@ -11,7 +11,7 @@
 #include <tomcrypt.h>
 
 /* sha1 hash function */
-int hashSHA1(unsigned char *in, int inlen, unsigned char *out, int *outlen)
+int hashSHA1(unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
 {
     hash_state md;
     if (*outlen < 20) {
@@ -26,7 +26,7 @@ int hashSHA1(unsigned char *in, int inlen, unsigned char *out, int *outlen)
 }
 
 /* hmac hash function */
-int hashHMAC(unsigned char *key, int keylen, unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
+int hashHMAC(unsigned char *key, unsigned long keylen, unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
 {
     int idx, err;
     hmac_state hmac;

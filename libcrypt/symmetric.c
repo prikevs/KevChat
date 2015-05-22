@@ -12,7 +12,7 @@
 
 /* use aes and ctr mode */
 
-int generateRandom(unsigned char *array, int len)
+int generateRandom(unsigned char *array, unsigned long len)
 {
     int err, x;
     prng_state prng;
@@ -30,7 +30,7 @@ int generateRandom(unsigned char *array, int len)
     return CRYPT_OK;
 }
 
-int symmetricEncrypt(unsigned char *key, int keylen, unsigned char *in, unsigned long len, unsigned char *IV, int ivlen)
+int symmetricEncrypt(unsigned char *key, unsigned long keylen, unsigned char *in, unsigned long len, unsigned char *IV, unsigned long ivlen)
 {
     symmetric_CTR ctr;
     int err;
@@ -76,7 +76,7 @@ int symmetricEncrypt(unsigned char *key, int keylen, unsigned char *in, unsigned
     return CRYPT_OK;
 }
 
-int symmetricDecrypt(unsigned char *key, int keylen, unsigned char *in, unsigned long len, unsigned char *IV, int ivlen)
+int symmetricDecrypt(unsigned char *key, unsigned long keylen, unsigned char *in, unsigned long len, unsigned char *IV, unsigned long ivlen)
 {
     symmetric_CTR ctr;
     int err;

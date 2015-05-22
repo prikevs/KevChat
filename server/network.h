@@ -28,9 +28,12 @@
 #include <ctype.h>
 #include <limits.h>
 
+#include "session.h"
+#include "client.h"
+
 #define BUFSIZE 4096
 
-typedef _ThreadData {
+typedef struct _ThreadData {
     int client_fd;
     struct sockaddr_in client_addr;    
     SessionList *sessionlist;

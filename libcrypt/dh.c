@@ -25,7 +25,7 @@ static void getPrime(mpz_t prime, unsigned long bits, unsigned long k)
     mpz_clear(bk);
 }
 
-static void getPowm(unsigned char *res, size_t *reslen, const mpz_t base, const unsigned char *chexp, int len)
+static void getPowm(unsigned char *res, unsigned long *reslen, const mpz_t base, const unsigned char *chexp, unsigned long len)
 {
     mpz_t prime;
     mpz_t exp;
@@ -61,7 +61,7 @@ static void getPowm(unsigned char *res, size_t *reslen, const mpz_t base, const 
     mpz_clear(exp);
 }
 
-void getPublic(unsigned char *public, size_t *publen, const unsigned char *private, int prilen)
+void getPublic(unsigned char *public, unsigned long *publen, const unsigned char *private, unsigned long prilen)
 {
     mpz_t base;
     mpz_init_set_ui(base, BASE);
@@ -71,7 +71,7 @@ void getPublic(unsigned char *public, size_t *publen, const unsigned char *priva
     mpz_clear(base); 
 }
 
-void getKey(unsigned char *key, size_t *keylen, const unsigned char *public, int publen, const unsigned char *private, int prilen)
+void getKey(unsigned char *key, unsigned long *keylen, const unsigned char *public, unsigned long publen, const unsigned char *private, unsigned long prilen)
 {
     mpz_t base;
     mpz_init(base);
