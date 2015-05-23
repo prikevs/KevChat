@@ -24,3 +24,14 @@ void Auth_ParseDHMsg(unsigned char *msg, unsigned long msglen, unsigned char *pr
 {
     getKey(key, &keylen, msg, msglen, private, prilen);
 }
+
+void Auth_MakeSaltMsg(unsigned char *msg, unsigned long *msglen, unsigned char *salt, unsigned long *saltlen, unsigned char *key, unsigned long keylen)
+{
+
+}
+
+int Auth_Verify(unsigned char *msg, unsigned long msglen, unsigned char *salt, unsigned long saltlen, unsigned char *key, unsigned long keylen)
+{}
+
+void Auth_MakeSuccessMsg(unsigned char *msg, unsigned long *msglen, unsigned char *session, unsigned long slen, unsigned char *key, unsigned long keylen)
+{}

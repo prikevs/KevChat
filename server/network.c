@@ -8,6 +8,22 @@
     >Description:
       * functions attached to socket
 ***************************************************/
+/* 
+   This is just a demonstrate implementation with multi-thread handling TCP connections, and will be optimized with epoll and get Auth and Msg separated
+*/
+
+/*
+    Authentication process:
+      * Use Diffie-Hellman to generate AES key first:
+          server and client both generate a 128-bit random number, and get their public keys with the base 65537 and a 128-bit prime number 2^128-233
+          server send the number to client
+          client recv server's public key and cacualte the number to get the final key, then send its public key
+          server recv client's public key to get the same final key too, then use the key encrypt a random salt number
+          client recv the data and decrypt it, then use the salt to hash the hashed key, and send it with the userid
+          server verify userid and passwd, if success, respond with the UDP address, and refresh this client's online status, or return wrong passwd.
+          client use UDP to send other messages.
+ 
+*/
 
 #include "network.h"
 #include "database.h"
@@ -21,6 +37,7 @@
 #include <pthread.h>
 
 #define MAXLISTEN 6
+#define MAX_WRONG_PASSWD 3
 void dump(unsigned char *arr, int len)
 {
     int i;
@@ -29,6 +46,9 @@ void dump(unsigned char *arr, int len)
     printf("\n");
 }
 
+void log_success(SessionList *sessionlist, ClientList *clientlist, unsigned char *session, unsigned long *slen)
+{}
+
 
 void *DisposeNewClient(void *ptr)
 {
@@ -36,6 +56,8 @@ void *DisposeNewClient(void *ptr)
 
     unsigned char pri[AESKEYLEN];
     unsigned char key[AESKEYLEN];
+    unsigned char salt[AESKEYLEN];
+    unsigned char session[AESKEYLEN];
     unsigned char buf[BUFSIZE];
 
     struct sockaddr_in client_addr;
@@ -45,8 +67,12 @@ void *DisposeNewClient(void *ptr)
 
     unsigned long len = sizeof(buf);
     unsigned long keylen = sizeof(key);
+    unsigned long slen = sizeof(session);
+    unsigned long saltlen = sizeof(salt);
+
     ssize_t res = 0;
     int client_fd = 0;
+    int t = 0;
 
     memset(buf, 0, sizeof(buf));
     memset(&client_addr, 0, sizeof(client_addr));
@@ -55,13 +81,16 @@ void *DisposeNewClient(void *ptr)
     client_fd = threaddata->client_fd;
     sessionlist = threaddata->sessionlist;
     clientlist = threaddata->clientlist;
+    /* free the memory of threaddata malloc in the main thread */
     free(threaddata);
 
 
+    /* make diffie-hellman message */
     Auth_MakeDHMsg(buf, &len, pri, AESKEYLEN);
     res = send(client_fd, buf, len, 0);
     //dump(buf, len);
     if (res < 0) {
+        close(threaddata->client_fd);
         threaddata = NULL; 
         pthread_exit(NULL);
     } 
@@ -70,11 +99,38 @@ void *DisposeNewClient(void *ptr)
     res = recv(client_fd, buf, BUFSIZE, 0); 
     //dump(buf, 16);
     if (res < 0) {
+        close(threaddata->client_fd);
         threaddata = NULL; 
         pthread_exit(NULL);
     }
     Auth_ParseDHMsg(buf, res, pri, 16, key, &keylen);
     //dump(key, 16);
+
+    /* send salt number */
+    Auth_MakeSaltMsg(buf, &len, salt, &saltlen, key, keylen);
+    res = send(client_fd, buf, len, 0);
+    //dump(buf, len);
+    if (res < 0) {
+        close(threaddata->client_fd);
+        threaddata = NULL; 
+        pthread_exit(NULL);
+    } 
+
+    t = 0;
+    while(t < MAX_WRONG_PASSWD) {
+        res = recv(client_fd, buf, BUFSIZE, 0); 
+        if (res < 0) {
+            t++; 
+            continue;
+        }
+        if (Auth_Verify(buf, res, salt, saltlen, key, keylen) == 0) {
+            t++;
+            continue;
+        } 
+        log_success(sessionlist, clientlist, session, &slen);
+        Auth_MakeSuccessMsg(buf, &len, session, slen, key, keylen);
+        break; 
+    } 
 
     close(threaddata->client_fd);
     pthread_exit(NULL);
