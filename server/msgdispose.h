@@ -15,4 +15,10 @@ void Auth_MakeDHMsg(unsigned char *, unsigned long *, unsigned char *, unsigned 
 
 void Auth_ParseDHMsg(unsigned char *, unsigned long , unsigned char *, unsigned long , unsigned char *, unsigned long *);
 
+void Auth_MakeSaltMsg(unsigned char *, unsigned long *, unsigned char *, unsigned long *, unsigned char *, unsigned long);
+
+int Auth_Verify(unsigned char *, unsigned long , unsigned char *, unsigned long, unsigned char *, unsigned long);
+
+void Auth_MakeSuccessMsg(unsigned char *, unsigned long *, unsigned char *, unsigned long, unsigned char *, unsigned long);
+
 #endif

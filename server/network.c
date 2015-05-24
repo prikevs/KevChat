@@ -108,6 +108,8 @@ void *DisposeNewClient(void *ptr)
 
     /* send salt number */
     Auth_MakeSaltMsg(buf, &len, salt, &saltlen, key, keylen);
+    printf("salt: ");
+    dump(salt, saltlen);
     res = send(client_fd, buf, len, 0);
     //dump(buf, len);
     if (res < 0) {
@@ -173,7 +175,6 @@ int tcp_start(const char *ip_addr, const unsigned short port, SessionList *sessi
     int sockfd, ret;
     int on = 1;
     struct sockaddr_in server;
-    int so;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     setsockopt(sockfd ,SOL_SOCKET ,SO_REUSEADDR,(const char*)&on,sizeof(on));

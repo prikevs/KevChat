@@ -1,0 +1,1 @@
+NOTICE [2015-05-24 03:06:05] [logger.c:63] log_open

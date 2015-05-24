@@ -13,6 +13,7 @@
 #define USERLEN 20
 #define HASHLEN 20
 #define IDLEN 4
+#define SALTLEN 16
 
 #define MSGALLLEN 1068
 #define SESSIONLEN 16

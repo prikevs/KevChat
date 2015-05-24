@@ -11,15 +11,11 @@
 
 #define BUFSIZE 4096
 
-void generateData(unsigned char *buff, int len)
+
+void decrypt(unsigned char *buf, int len, unsigned char *key, int keylen, unsigned char *salt)
 {
-    unsigned char iv[16];
-    int i;
-    int err;
-
-    //generateRandom(buff, 16);
-    //generateRandom(iv, 16);
-
+    symmetricDecrypt(key, keylen, buf+16, len-16, buf, 16);
+    memcpy(salt, buf+16, 16);
 }
 
 void dump(unsigned char *buff, int len)
@@ -35,8 +31,7 @@ int main()
     int sockfd, res;
     struct sockaddr_in servaddr;
     unsigned char key[16], buff[BUFSIZE];
-    unsigned char pri[16];
-    unsigned long prilen;
+    unsigned char pri[16], salt[16];
     unsigned long keylen;
     unsigned long publen;
 
@@ -55,21 +50,28 @@ int main()
     }
 
     generateRandom(pri, 16);
-    printf("sockfd=%d\n", sockfd);
+//    printf("sockfd=%d\n", sockfd);
     res = recv(sockfd, buff, BUFSIZE, 0);
     printf("%d bytes recv.\n", res);
     keylen = sizeof(key);
     getKey(key, &keylen, buff, 16, pri, 16);
 
     publen = sizeof(buff);
-    printf("sockfd=%d\n", sockfd);
+//    printf("sockfd=%d\n", sockfd);
     getPublic(buff, &publen, pri, 16);
-    printf("sockfd=%d\n", sockfd);
+//    printf("sockfd=%d\n", sockfd);
     res = send(sockfd, buff, publen, 0);
     perror("send  ");
     printf("%d bytes sent.\n", res);
     dump(key, res);
+
+    res = recv(sockfd, buff, BUFSIZE, 0);
+    printf("%d bytes recv.\n", res);
+
+    decrypt(buff, res, key, 16, salt);
+    printf("salt: ");
+    dump(salt, 16);
     //res = sendto(sockfd, &data, sizeof(data), 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
-    sleep(10);
+//    sleep(10);
     return 0;
 }
